@@ -157,6 +157,17 @@ export function AlertsTable() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedAlerts = filteredAlerts.slice(startIndex, startIndex + itemsPerPage);
 
+  // Reset to page 1 when filters change
+  const handleFilterChange = (newFilter: string) => {
+    setStatusFilter(newFilter);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -169,10 +180,10 @@ export function AlertsTable() {
                 placeholder="Buscar alertas..." 
                 className="pl-10 w-full sm:w-64"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
               />
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <Select value={statusFilter} onValueChange={handleFilterChange}>
               <SelectTrigger className="w-full sm:w-40">
                 <Filter className="w-4 h-4 mr-2" />
                 <SelectValue placeholder="Filtrar" />
@@ -303,15 +314,15 @@ export function AlertsTable() {
           </table>
         </div>
         
-        {/* Pagination */}
+        {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious 
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-accent"}
                   />
                 </PaginationItem>
                 
@@ -320,7 +331,7 @@ export function AlertsTable() {
                     <PaginationLink
                       onClick={() => setCurrentPage(page)}
                       isActive={page === currentPage}
-                      className="cursor-pointer"
+                      className="cursor-pointer hover:bg-accent"
                     >
                       {page}
                     </PaginationLink>
@@ -330,7 +341,7 @@ export function AlertsTable() {
                 <PaginationItem>
                   <PaginationNext 
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-accent"}
                   />
                 </PaginationItem>
               </PaginationContent>
@@ -338,8 +349,12 @@ export function AlertsTable() {
           </div>
         )}
         
+        {/* Pagination Info */}
         <div className="mt-4 text-sm text-muted-foreground text-center">
           Mostrando {startIndex + 1} a {Math.min(startIndex + itemsPerPage, filteredAlerts.length)} de {filteredAlerts.length} alertas
+          {totalPages > 1 && (
+            <span className="ml-2">• Página {currentPage} de {totalPages}</span>
+          )}
         </div>
       </CardContent>
     </Card>

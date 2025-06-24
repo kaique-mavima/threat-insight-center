@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { Settings as SettingsIcon, Database, Bell, Mail, MessageCircle, Users, Slack } from "lucide-react";
@@ -7,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-
 const Settings = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
 
   // Notification settings state
   const [emailEnabled, setEmailEnabled] = useState(true);
@@ -24,30 +24,24 @@ const Settings = () => {
     username: "",
     password: ""
   });
-
   const [telegramConfig, setTelegramConfig] = useState({
     botToken: "",
     chatId: ""
   });
-
   const [teamsConfig, setTeamsConfig] = useState({
     webhookUrl: ""
   });
-
   const [slackConfig, setSlackConfig] = useState({
     webhookUrl: "",
     channel: ""
   });
-
   const handleSaveNotificationSettings = () => {
     toast({
       title: "Configurações salvas",
       description: "As configurações de notificação foram atualizadas com sucesso."
     });
   };
-
-  return (
-    <Layout>
+  return <Layout>
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-400 to-slate-400 bg-clip-text text-transparent">
@@ -83,31 +77,7 @@ const Settings = () => {
           </div>
 
           {/* Alert Configuration */}
-          <div className="bg-card rounded-lg p-6 border border-border">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Bell className="w-5 h-5" />
-              Configuração de Alertas
-            </h3>
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
-                Os alertas são enviados com as seguintes informações por padrão:
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <span className="text-sm">Título</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span className="text-sm">Descrição</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                  <span className="text-sm">Severidade</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          
 
           {/* Email Notifications */}
           <div className="bg-card rounded-lg p-6 border border-border">
@@ -118,47 +88,36 @@ const Settings = () => {
               </h3>
               <Switch checked={emailEnabled} onCheckedChange={setEmailEnabled} />
             </div>
-            {emailEnabled && (
-              <div className="space-y-3">
+            {emailEnabled && <div className="space-y-3">
                 <div>
                   <Label htmlFor="smtp-server">Servidor SMTP</Label>
-                  <Input
-                    id="smtp-server"
-                    value={emailConfig.smtpServer}
-                    onChange={(e) => setEmailConfig({ ...emailConfig, smtpServer: e.target.value })}
-                    placeholder="smtp.gmail.com"
-                  />
+                  <Input id="smtp-server" value={emailConfig.smtpServer} onChange={e => setEmailConfig({
+                ...emailConfig,
+                smtpServer: e.target.value
+              })} placeholder="smtp.gmail.com" />
                 </div>
                 <div>
                   <Label htmlFor="smtp-port">Porta</Label>
-                  <Input
-                    id="smtp-port"
-                    value={emailConfig.port}
-                    onChange={(e) => setEmailConfig({ ...emailConfig, port: e.target.value })}
-                    placeholder="587"
-                  />
+                  <Input id="smtp-port" value={emailConfig.port} onChange={e => setEmailConfig({
+                ...emailConfig,
+                port: e.target.value
+              })} placeholder="587" />
                 </div>
                 <div>
                   <Label htmlFor="smtp-username">Usuário</Label>
-                  <Input
-                    id="smtp-username"
-                    value={emailConfig.username}
-                    onChange={(e) => setEmailConfig({ ...emailConfig, username: e.target.value })}
-                    placeholder="seu-email@dominio.com"
-                  />
+                  <Input id="smtp-username" value={emailConfig.username} onChange={e => setEmailConfig({
+                ...emailConfig,
+                username: e.target.value
+              })} placeholder="seu-email@dominio.com" />
                 </div>
                 <div>
                   <Label htmlFor="smtp-password">Senha</Label>
-                  <Input
-                    id="smtp-password"
-                    type="password"
-                    value={emailConfig.password}
-                    onChange={(e) => setEmailConfig({ ...emailConfig, password: e.target.value })}
-                    placeholder="Senha do aplicativo"
-                  />
+                  <Input id="smtp-password" type="password" value={emailConfig.password} onChange={e => setEmailConfig({
+                ...emailConfig,
+                password: e.target.value
+              })} placeholder="Senha do aplicativo" />
                 </div>
-              </div>
-            )}
+              </div>}
           </div>
 
           {/* Telegram Notifications */}
@@ -170,28 +129,22 @@ const Settings = () => {
               </h3>
               <Switch checked={telegramEnabled} onCheckedChange={setTelegramEnabled} />
             </div>
-            {telegramEnabled && (
-              <div className="space-y-3">
+            {telegramEnabled && <div className="space-y-3">
                 <div>
                   <Label htmlFor="telegram-token">Token do Bot</Label>
-                  <Input
-                    id="telegram-token"
-                    value={telegramConfig.botToken}
-                    onChange={(e) => setTelegramConfig({ ...telegramConfig, botToken: e.target.value })}
-                    placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
-                  />
+                  <Input id="telegram-token" value={telegramConfig.botToken} onChange={e => setTelegramConfig({
+                ...telegramConfig,
+                botToken: e.target.value
+              })} placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" />
                 </div>
                 <div>
                   <Label htmlFor="telegram-chat">ID do Chat</Label>
-                  <Input
-                    id="telegram-chat"
-                    value={telegramConfig.chatId}
-                    onChange={(e) => setTelegramConfig({ ...telegramConfig, chatId: e.target.value })}
-                    placeholder="-1001234567890"
-                  />
+                  <Input id="telegram-chat" value={telegramConfig.chatId} onChange={e => setTelegramConfig({
+                ...telegramConfig,
+                chatId: e.target.value
+              })} placeholder="-1001234567890" />
                 </div>
-              </div>
-            )}
+              </div>}
           </div>
 
           {/* Teams Notifications */}
@@ -203,19 +156,15 @@ const Settings = () => {
               </h3>
               <Switch checked={teamsEnabled} onCheckedChange={setTeamsEnabled} />
             </div>
-            {teamsEnabled && (
-              <div className="space-y-3">
+            {teamsEnabled && <div className="space-y-3">
                 <div>
                   <Label htmlFor="teams-webhook">URL do Webhook</Label>
-                  <Input
-                    id="teams-webhook"
-                    value={teamsConfig.webhookUrl}
-                    onChange={(e) => setTeamsConfig({ ...teamsConfig, webhookUrl: e.target.value })}
-                    placeholder="https://seu-tenant.webhook.office.com/webhookb2/..."
-                  />
+                  <Input id="teams-webhook" value={teamsConfig.webhookUrl} onChange={e => setTeamsConfig({
+                ...teamsConfig,
+                webhookUrl: e.target.value
+              })} placeholder="https://seu-tenant.webhook.office.com/webhookb2/..." />
                 </div>
-              </div>
-            )}
+              </div>}
           </div>
 
           {/* Slack Notifications */}
@@ -227,28 +176,22 @@ const Settings = () => {
               </h3>
               <Switch checked={slackEnabled} onCheckedChange={setSlackEnabled} />
             </div>
-            {slackEnabled && (
-              <div className="space-y-3">
+            {slackEnabled && <div className="space-y-3">
                 <div>
                   <Label htmlFor="slack-webhook">URL do Webhook</Label>
-                  <Input
-                    id="slack-webhook"
-                    value={slackConfig.webhookUrl}
-                    onChange={(e) => setSlackConfig({ ...slackConfig, webhookUrl: e.target.value })}
-                    placeholder="https://hooks.slack.com/services/..."
-                  />
+                  <Input id="slack-webhook" value={slackConfig.webhookUrl} onChange={e => setSlackConfig({
+                ...slackConfig,
+                webhookUrl: e.target.value
+              })} placeholder="https://hooks.slack.com/services/..." />
                 </div>
                 <div>
                   <Label htmlFor="slack-channel">Canal</Label>
-                  <Input
-                    id="slack-channel"
-                    value={slackConfig.channel}
-                    onChange={(e) => setSlackConfig({ ...slackConfig, channel: e.target.value })}
-                    placeholder="#alertas"
-                  />
+                  <Input id="slack-channel" value={slackConfig.channel} onChange={e => setSlackConfig({
+                ...slackConfig,
+                channel: e.target.value
+              })} placeholder="#alertas" />
                 </div>
-              </div>
-            )}
+              </div>}
           </div>
         </div>
 
@@ -258,8 +201,6 @@ const Settings = () => {
           </Button>
         </div>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Settings;

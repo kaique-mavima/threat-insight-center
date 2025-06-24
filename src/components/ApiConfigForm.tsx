@@ -10,6 +10,21 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Settings, CheckCircle, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+interface JiraConfig {
+  url: string;
+  email: string;
+  apiToken: string;
+}
+
+interface GoogleSheetsConfig {
+  sheetId: string;
+  credentials: string;
+}
+
+interface MapsConfig {
+  apiKey: string;
+}
+
 export function ApiConfigForm() {
   const { toast } = useToast();
   const [configs, setConfigs] = useState({
@@ -17,14 +32,14 @@ export function ApiConfigForm() {
       url: localStorage.getItem('jira_url') || '',
       email: localStorage.getItem('jira_email') || '',
       apiToken: localStorage.getItem('jira_api_token') || '',
-    },
+    } as JiraConfig,
     googleSheets: {
       sheetId: localStorage.getItem('google_sheets_id') || '',
       credentials: localStorage.getItem('google_credentials') || '',
-    },
+    } as GoogleSheetsConfig,
     maps: {
       apiKey: localStorage.getItem('google_maps_api_key') || '',
-    }
+    } as MapsConfig
   });
 
   const [testResults, setTestResults] = useState<{[key: string]: boolean | null}>({
@@ -44,17 +59,18 @@ export function ApiConfigForm() {
   };
 
   const saveConfig = (service: string) => {
-    const config = configs[service as keyof typeof configs];
-    
     if (service === 'jira') {
-      localStorage.setItem('jira_url', config.url || '');
-      localStorage.setItem('jira_email', config.email || '');
-      localStorage.setItem('jira_api_token', config.apiToken || '');
+      const config = configs.jira;
+      localStorage.setItem('jira_url', config.url);
+      localStorage.setItem('jira_email', config.email);
+      localStorage.setItem('jira_api_token', config.apiToken);
     } else if (service === 'googleSheets') {
-      localStorage.setItem('google_sheets_id', config.sheetId || '');
-      localStorage.setItem('google_credentials', config.credentials || '');
+      const config = configs.googleSheets;
+      localStorage.setItem('google_sheets_id', config.sheetId);
+      localStorage.setItem('google_credentials', config.credentials);
     } else if (service === 'maps') {
-      localStorage.setItem('google_maps_api_key', config.apiKey || '');
+      const config = configs.maps;
+      localStorage.setItem('google_maps_api_key', config.apiKey);
     }
 
     toast({

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Bell, CheckCircle, AlertCircle, MessageSquare, Mail, Send } from "lucide-react";
+import { Bell, CheckCircle, AlertCircle, MessageSquare, Mail, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { NotificationService } from "@/services/notificationService";
 import { NotificationChannels } from "@/types/notifications";
@@ -46,6 +46,13 @@ export function NotificationIntegrations() {
     smtp: null,
   });
 
+  const [isTestingConnection, setIsTestingConnection] = useState<{[key: string]: boolean}>({
+    slack: false,
+    teams: false,
+    telegram: false,
+    smtp: false,
+  });
+
   const handleConfigChange = (service: keyof NotificationChannels, field: string, value: any) => {
     setConfigs(prev => ({
       ...prev,
@@ -57,6 +64,8 @@ export function NotificationIntegrations() {
   };
 
   const saveConfig = (service: string) => {
+    console.log(`Salvando configuração para ${service}:`, configs[service as keyof NotificationChannels]);
+    
     if (service === 'slack') {
       const config = configs.slack;
       localStorage.setItem('slack_webhook_url', config.webhookUrl);
@@ -88,20 +97,37 @@ export function NotificationIntegrations() {
   };
 
   const testConnection = async (service: string) => {
+    console.log(`Iniciando teste de conexão para ${service}`);
+    
+    setIsTestingConnection(prev => ({ ...prev, [service]: true }));
     setTestResults(prev => ({ ...prev, [service]: null }));
     
     const config = configs[service as keyof NotificationChannels];
-    const result = await NotificationService.testConnection(service, config);
     
-    setTestResults(prev => ({ ...prev, [service]: result }));
-    
-    toast({
-      title: result ? "Teste bem-sucedido" : "Falha no teste",
-      description: result 
-        ? "A mensagem de teste foi enviada com sucesso."
-        : "Verifique suas configurações e tente novamente.",
-      variant: result ? "default" : "destructive",
-    });
+    try {
+      const result = await NotificationService.testConnection(service, config);
+      
+      setTestResults(prev => ({ ...prev, [service]: result }));
+      
+      toast({
+        title: result ? "Teste bem-sucedido!" : "Falha no teste",
+        description: result 
+          ? "A mensagem de teste foi enviada com sucesso. Verifique seu canal de comunicação."
+          : "Verifique suas configurações e tente novamente. Consulte o console para mais detalhes.",
+        variant: result ? "default" : "destructive",
+      });
+    } catch (error) {
+      console.error('Erro no teste de conexão:', error);
+      setTestResults(prev => ({ ...prev, [service]: false }));
+      
+      toast({
+        title: "Erro no teste",
+        description: "Ocorreu um erro ao tentar enviar a mensagem de teste. Verifique o console para mais detalhes.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsTestingConnection(prev => ({ ...prev, [service]: false }));
+    }
   };
 
   const getServiceName = (service: string) => {
@@ -135,7 +161,7 @@ export function NotificationIntegrations() {
             <Alert>
               <MessageSquare className="h-4 w-4" />
               <AlertDescription>
-                Configure o webhook do Slack para receber notificações de alertas em tempo real.
+                Configure o webhook do Slack para receber notificações de alertas em tempo real. Crie um webhook em: https://api.slack.com/messaging/webhooks
               </AlertDescription>
             </Alert>
             
@@ -150,7 +176,7 @@ export function NotificationIntegrations() {
               </div>
 
               <div>
-                <Label htmlFor="slack-webhook">Webhook URL</Label>
+                <Label htmlFor="slack-webhook">Webhook URL *</Label>
                 <Input
                   id="slack-webhook"
                   placeholder="https://hooks.slack.com/services/..."
@@ -163,8 +189,19 @@ export function NotificationIntegrations() {
                 <Button onClick={() => saveConfig('slack')}>
                   Salvar Configuração
                 </Button>
-                <Button variant="outline" onClick={() => testConnection('slack')}>
-                  Testar Conexão
+                <Button 
+                  variant="outline" 
+                  onClick={() => testConnection('slack')}
+                  disabled={!configs.slack.webhookUrl || isTestingConnection.slack}
+                >
+                  {isTestingConnection.slack ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Testando...
+                    </>
+                  ) : (
+                    'Testar Conexão'
+                  )}
                 </Button>
                 {testResults.slack !== null && (
                   <div className="flex items-center gap-2">
@@ -183,7 +220,7 @@ export function NotificationIntegrations() {
             <Alert>
               <MessageSquare className="h-4 w-4" />
               <AlertDescription>
-                Configure o webhook do Microsoft Teams para receber notificações de alertas.
+                Configure o webhook do Microsoft Teams para receber notificações de alertas. Crie um conector de webhook em seu canal do Teams.
               </AlertDescription>
             </Alert>
             
@@ -198,7 +235,7 @@ export function NotificationIntegrations() {
               </div>
 
               <div>
-                <Label htmlFor="teams-webhook">Webhook URL</Label>
+                <Label htmlFor="teams-webhook">Webhook URL *</Label>
                 <Input
                   id="teams-webhook"
                   placeholder="https://outlook.office.com/webhook/..."
@@ -211,8 +248,19 @@ export function NotificationIntegrations() {
                 <Button onClick={() => saveConfig('teams')}>
                   Salvar Configuração
                 </Button>
-                <Button variant="outline" onClick={() => testConnection('teams')}>
-                  Testar Conexão
+                <Button 
+                  variant="outline" 
+                  onClick={() => testConnection('teams')}
+                  disabled={!configs.teams.webhookUrl || isTestingConnection.teams}
+                >
+                  {isTestingConnection.teams ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Testando...
+                    </>
+                  ) : (
+                    'Testar Conexão'
+                  )}
                 </Button>
                 {testResults.teams !== null && (
                   <div className="flex items-center gap-2">
@@ -231,7 +279,7 @@ export function NotificationIntegrations() {
             <Alert>
               <Send className="h-4 w-4" />
               <AlertDescription>
-                Configure o bot do Telegram para receber notificações de alertas.
+                Configure o bot do Telegram para receber notificações. Crie um bot via @BotFather e obtenha o token. Para o Chat ID, adicione o bot ao grupo/canal desejado.
               </AlertDescription>
             </Alert>
             
@@ -246,7 +294,7 @@ export function NotificationIntegrations() {
               </div>
 
               <div>
-                <Label htmlFor="telegram-token">Token do Bot</Label>
+                <Label htmlFor="telegram-token">Token do Bot *</Label>
                 <Input
                   id="telegram-token"
                   type="password"
@@ -257,7 +305,7 @@ export function NotificationIntegrations() {
               </div>
 
               <div>
-                <Label htmlFor="telegram-chat">ID do Chat/Grupo</Label>
+                <Label htmlFor="telegram-chat">ID do Chat/Grupo *</Label>
                 <Input
                   id="telegram-chat"
                   placeholder="-123456789 ou @username"
@@ -270,8 +318,19 @@ export function NotificationIntegrations() {
                 <Button onClick={() => saveConfig('telegram')}>
                   Salvar Configuração
                 </Button>
-                <Button variant="outline" onClick={() => testConnection('telegram')}>
-                  Testar Conexão
+                <Button 
+                  variant="outline" 
+                  onClick={() => testConnection('telegram')}
+                  disabled={!configs.telegram.botToken || !configs.telegram.chatId || isTestingConnection.telegram}
+                >
+                  {isTestingConnection.telegram ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Testando...
+                    </>
+                  ) : (
+                    'Testar Conexão'
+                  )}
                 </Button>
                 {testResults.telegram !== null && (
                   <div className="flex items-center gap-2">

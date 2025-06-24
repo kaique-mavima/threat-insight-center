@@ -1,22 +1,21 @@
-
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Bell, User, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
 export function Header() {
-  const { currentUser, logout } = useAuth();
-
-  return (
-    <header className="border-b border-border bg-card/50 backdrop-blur-sm">
+  const {
+    currentUser,
+    logout
+  } = useAuth();
+  return <header className="border-b border-border bg-card/50 backdrop-blur-sm">
       <div className="flex items-center justify-between h-16 px-6">
         <div className="flex items-center gap-4">
-          <SidebarTrigger />
+          
           <div>
-            <h2 className="text-lg font-semibold">Painel de Inteligência Cibernética</h2>
-            <p className="text-sm text-muted-foreground">Monitoramento e resposta a ameaças em tempo real</p>
+            
+            
           </div>
         </div>
         
@@ -52,6 +51,5 @@ export function Header() {
           </DropdownMenu>
         </div>
       </div>
-    </header>
-  );
+    </header>;
 }

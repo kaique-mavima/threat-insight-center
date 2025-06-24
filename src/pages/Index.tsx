@@ -1,19 +1,14 @@
-
 import { Layout } from "@/components/Layout";
 import { KPICard } from "@/components/KPICard";
 import { AlertsChart } from "@/components/AlertsChart";
 import { AlertsTable } from "@/components/AlertsTable";
 import { Shield, AlertTriangle, Clock, CheckCircle, Activity } from "lucide-react";
-
 const Index = () => {
-  return (
-    <Layout>
+  return <Layout>
       <div className="space-y-8">
         {/* Page Header */}
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-            Painel de Operações de Segurança
-          </h1>
+          <h1 className="text-3xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-center text-slate-50 font-bold">SIC Insights</h1>
           <p className="text-muted-foreground mt-2">
             Monitore, analise e responda a ameaças de segurança em tempo real
           </p>
@@ -21,38 +16,10 @@ const Index = () => {
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <KPICard
-            title="Total de Alertas"
-            value="204"
-            change="+12% em relação à semana passada"
-            changeType="neutral"
-            icon={Shield}
-            gradient="from-blue-500 to-cyan-400"
-          />
-          <KPICard
-            title="Alertas Críticos"
-            value="23"
-            change="+5 desde ontem"
-            changeType="negative"
-            icon={AlertTriangle}
-            gradient="from-red-500 to-pink-400"
-          />
-          <KPICard
-            title="Tempo Médio de Resposta"
-            value="14m"
-            change="-8% de melhoria"
-            changeType="positive"
-            icon={Clock}
-            gradient="from-orange-500 to-yellow-400"
-          />
-          <KPICard
-            title="Resolvidos Hoje"
-            value="89"
-            change="+23% vs ontem"
-            changeType="positive"
-            icon={CheckCircle}
-            gradient="from-green-500 to-emerald-400"
-          />
+          <KPICard title="Total de Alertas" value="204" change="+12% em relação à semana passada" changeType="neutral" icon={Shield} gradient="from-blue-500 to-cyan-400" />
+          <KPICard title="Alertas Críticos" value="23" change="+5 desde ontem" changeType="negative" icon={AlertTriangle} gradient="from-red-500 to-pink-400" />
+          <KPICard title="Tempo Médio de Resposta" value="14m" change="-8% de melhoria" changeType="positive" icon={Clock} gradient="from-orange-500 to-yellow-400" />
+          <KPICard title="Resolvidos Hoje" value="89" change="+23% vs ontem" changeType="positive" icon={CheckCircle} gradient="from-green-500 to-emerald-400" />
         </div>
 
         {/* Charts Section */}
@@ -60,47 +27,10 @@ const Index = () => {
 
         {/* System Status */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
-            <div className="bg-card rounded-lg p-6 border border-border">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Activity className="w-5 h-5" />
-                Status do Sistema
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Segurança de Email</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm text-green-400">Online</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Segurança Web</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm text-green-400">Online</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Inteligência de Ameaças</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm text-yellow-400">Atualizando</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Integração JIRA</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm text-green-400">Conectado</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          
           
           <div className="lg:col-span-2">
-            <div className="bg-card rounded-lg p-6 border border-border">
+            <div className="bg-card rounded-lg p-6 border border-border px-[24px]">
               <h3 className="text-lg font-semibold mb-4">Atividade Recente</h3>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
@@ -139,8 +69,6 @@ const Index = () => {
         {/* Alerts Table */}
         <AlertsTable />
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Index;

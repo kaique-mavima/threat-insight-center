@@ -1,6 +1,8 @@
 
 import { Layout } from "@/components/Layout";
 import { KPICard } from "@/components/KPICard";
+import { ThreatIntelTable } from "@/components/ThreatIntelTable";
+import { GeoMap } from "@/components/GeoMap";
 import { Database, TrendingUp, Users, Calendar } from "lucide-react";
 
 const ThreatIntel = () => {
@@ -12,16 +14,16 @@ const ThreatIntel = () => {
             Inteligência de Ameaças
           </h1>
           <p className="text-muted-foreground mt-2">
-            Analise dados de ameaças e feeds de inteligência
+            Analise dados de ameaças, credenciais comprometidas e feeds de inteligência
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <KPICard
-            title="Total de Registros"
+            title="Credenciais Comprometidas"
             value="15,847"
-            change="+234 novos hoje"
-            changeType="neutral"
+            change="+234 novas hoje"
+            changeType="negative"
             icon={Database}
             gradient="from-purple-500 to-pink-400"
           />
@@ -34,29 +36,28 @@ const ThreatIntel = () => {
             gradient="from-red-500 to-pink-400"
           />
           <KPICard
-            title="Usuários Afetados"
-            value="789"
+            title="Domínios Afetados"
+            value="89"
             change="+12% do mês passado"
             changeType="negative"
             icon={Users}
             gradient="from-orange-500 to-red-400"
           />
           <KPICard
-            title="Última Atualização"
+            title="Última Sincronização"
             value="2h atrás"
-            change="Sincronização automática ativada"
+            change="Google Sheets conectado"
             changeType="positive"
             icon={Calendar}
             gradient="from-green-500 to-blue-400"
           />
         </div>
 
-        <div className="bg-card rounded-lg p-6 border border-border">
-          <h3 className="text-lg font-semibold mb-4">Dados de Inteligência de Ameaças</h3>
-          <p className="text-muted-foreground">
-            Conecte ao Google Sheets para exibir dados de inteligência de ameaças incluindo credenciais comprometidas e informações de vulnerabilidades.
-          </p>
-        </div>
+        {/* Mapa de Geolocalização */}
+        <GeoMap />
+
+        {/* Tabela de Credenciais Comprometidas */}
+        <ThreatIntelTable />
       </div>
     </Layout>
   );

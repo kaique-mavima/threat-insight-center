@@ -40,8 +40,8 @@ export function AppSidebar() {
             <img src="/lovable-uploads/a9812223-178a-479f-a62f-df2744d52b5c.png" alt="SIC Logo" className="w-full h-full object-cover" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">SIC Dashboard</h1>
-            <p className="text-xs text-muted-foreground">Cyber ​​Intelligence Service</p>
+            <h1 className="text-xl font-bold text-white">SIC Insights</h1>
+            <p className="text-xs text-muted-foreground">Threat Insight Center</p>
           </div>
         </div>
       </SidebarHeader>

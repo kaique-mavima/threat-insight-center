@@ -1,32 +1,62 @@
-
 import { AlertNotification, NotificationChannels } from '@/types/notifications';
+import { apiService } from '@/services/apiService';
 
 export class NotificationService {
-  private static getStoredChannels(): NotificationChannels {
-    return {
-      slack: {
-        webhookUrl: localStorage.getItem('slack_webhook_url') || '',
-        enabled: localStorage.getItem('slack_enabled') === 'true',
-      },
-      teams: {
-        webhookUrl: localStorage.getItem('teams_webhook_url') || '',
-        enabled: localStorage.getItem('teams_enabled') === 'true',
-      },
-      telegram: {
-        botToken: localStorage.getItem('telegram_bot_token') || '',
-        chatId: localStorage.getItem('telegram_chat_id') || '',
-        enabled: localStorage.getItem('telegram_enabled') === 'true',
-      },
-      smtp: {
-        server: localStorage.getItem('smtp_server') || '',
-        port: parseInt(localStorage.getItem('smtp_port') || '587'),
-        username: localStorage.getItem('smtp_username') || '',
-        password: localStorage.getItem('smtp_password') || '',
-        fromEmail: localStorage.getItem('smtp_from_email') || '',
-        toEmails: JSON.parse(localStorage.getItem('smtp_to_emails') || '[]'),
-        enabled: localStorage.getItem('smtp_enabled') === 'true',
-      },
-    };
+  private static async getStoredChannels(): Promise<NotificationChannels> {
+    try {
+      // Tentar carregar configurações da API primeiro
+      const configs = await apiService.getConfigs();
+      
+      const channels: NotificationChannels = {
+        slack: { webhookUrl: '', enabled: false },
+        teams: { webhookUrl: '', enabled: false },
+        telegram: { botToken: '', chatId: '', enabled: false },
+        smtp: { server: '', port: 587, username: '', password: '', fromEmail: '', toEmails: [], enabled: false },
+      };
+
+      // Mapear configurações da API
+      configs.forEach(config => {
+        if (config.configType === 'slack') {
+          channels.slack = config.config;
+        } else if (config.configType === 'teams') {
+          channels.teams = config.config;
+        } else if (config.configType === 'telegram') {
+          channels.telegram = config.config;
+        } else if (config.configType === 'smtp') {
+          channels.smtp = config.config;
+        }
+      });
+
+      return channels;
+    } catch (error) {
+      console.log('Erro ao carregar configurações da API, usando localStorage como fallback:', error);
+      
+      // Fallback para localStorage
+      return {
+        slack: {
+          webhookUrl: localStorage.getItem('slack_webhook_url') || '',
+          enabled: localStorage.getItem('slack_enabled') === 'true',
+        },
+        teams: {
+          webhookUrl: localStorage.getItem('teams_webhook_url') || '',
+          enabled: localStorage.getItem('teams_enabled') === 'true',
+        },
+        telegram: {
+          botToken: localStorage.getItem('telegram_bot_token') || '',
+          chatId: localStorage.getItem('telegram_chat_id') || '',
+          enabled: localStorage.getItem('telegram_enabled') === 'true',
+        },
+        smtp: {
+          server: localStorage.getItem('smtp_server') || '',
+          port: parseInt(localStorage.getItem('smtp_port') || '587'),
+          username: localStorage.getItem('smtp_username') || '',
+          password: localStorage.getItem('smtp_password') || '',
+          fromEmail: localStorage.getItem('smtp_from_email') || '',
+          toEmails: JSON.parse(localStorage.getItem('smtp_to_emails') || '[]'),
+          enabled: localStorage.getItem('smtp_enabled') === 'true',
+        },
+      };
+    }
   }
 
   private static async sendSlackNotification(alert: AlertNotification, config: any) {
@@ -195,7 +225,7 @@ export class NotificationService {
 
   public static async sendAlert(alert: AlertNotification) {
     console.log('Iniciando envio de alertas:', alert);
-    const channels = this.getStoredChannels();
+    const channels = await this.getStoredChannels();
     console.log('Canais configurados:', channels);
 
     const results = [];

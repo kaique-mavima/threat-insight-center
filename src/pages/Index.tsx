@@ -8,7 +8,7 @@ const Index = () => {
       <div className="space-y-8">
         {/* Page Header */}
         <div>
-          <h1 className="text-3xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-center text-slate-50 font-bold">Threat Insight Center</h1>
+          <h1 className="text-3xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-slate-50 font-bold text-left">Threat Insight Center</h1>
           <p className="text-muted-foreground mt-2">
             Monitore, analise e responda a ameaças de segurança em tempo real
           </p>

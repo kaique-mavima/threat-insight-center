@@ -90,7 +90,7 @@ export function AlertsChart() {
         <CardHeader>
           <CardTitle>Alert Severity Distribution</CardTitle>
         </CardHeader>
-        <CardContent className="bg-slate-50">
+        <CardContent className="bg-transparent">
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie data={severityData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value">

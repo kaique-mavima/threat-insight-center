@@ -10,42 +10,42 @@ const EmailSecurity = () => {
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-            Email Security
+            Segurança de Email
           </h1>
           <p className="text-muted-foreground mt-2">
-            Monitor and respond to email-based security threats
+            Monitore e responda a ameaças baseadas em email
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <KPICard
-            title="Email Alerts"
+            title="Alertas de Email"
             value="47"
-            change="+8% from last week"
+            change="+8% em relação à semana passada"
             changeType="neutral"
             icon={Mail}
             gradient="from-blue-500 to-cyan-400"
           />
           <KPICard
-            title="Phishing Attempts"
+            title="Tentativas de Phishing"
             value="12"
-            change="+3 from yesterday"
+            change="+3 desde ontem"
             changeType="negative"
             icon={AlertTriangle}
             gradient="from-red-500 to-pink-400"
           />
           <KPICard
-            title="Avg Response Time"
+            title="Tempo Médio de Resposta"
             value="8m"
-            change="-15% improvement"
+            change="-15% de melhoria"
             changeType="positive"
             icon={Clock}
             gradient="from-orange-500 to-yellow-400"
           />
           <KPICard
-            title="Blocked Emails"
+            title="Emails Bloqueados"
             value="156"
-            change="+12% vs yesterday"
+            change="+12% vs ontem"
             changeType="positive"
             icon={CheckCircle}
             gradient="from-green-500 to-emerald-400"

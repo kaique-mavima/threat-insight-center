@@ -12,43 +12,43 @@ const Index = () => {
         {/* Page Header */}
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-            Security Operations Dashboard
+            Painel de Operações de Segurança
           </h1>
           <p className="text-muted-foreground mt-2">
-            Monitor, analyze, and respond to security threats in real-time
+            Monitore, analise e responda a ameaças de segurança em tempo real
           </p>
         </div>
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <KPICard
-            title="Total Alerts"
+            title="Total de Alertas"
             value="204"
-            change="+12% from last week"
+            change="+12% em relação à semana passada"
             changeType="neutral"
             icon={Shield}
             gradient="from-blue-500 to-cyan-400"
           />
           <KPICard
-            title="Critical Alerts"
+            title="Alertas Críticos"
             value="23"
-            change="+5 from yesterday"
+            change="+5 desde ontem"
             changeType="negative"
             icon={AlertTriangle}
             gradient="from-red-500 to-pink-400"
           />
           <KPICard
-            title="Avg Response Time"
+            title="Tempo Médio de Resposta"
             value="14m"
-            change="-8% improvement"
+            change="-8% de melhoria"
             changeType="positive"
             icon={Clock}
             gradient="from-orange-500 to-yellow-400"
           />
           <KPICard
-            title="Resolved Today"
+            title="Resolvidos Hoje"
             value="89"
-            change="+23% vs yesterday"
+            change="+23% vs ontem"
             changeType="positive"
             icon={CheckCircle}
             gradient="from-green-500 to-emerald-400"
@@ -64,35 +64,35 @@ const Index = () => {
             <div className="bg-card rounded-lg p-6 border border-border">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Activity className="w-5 h-5" />
-                System Status
+                Status do Sistema
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm">Email Security</span>
+                  <span className="text-sm">Segurança de Email</span>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                     <span className="text-sm text-green-400">Online</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm">Web Security</span>
+                  <span className="text-sm">Segurança Web</span>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                     <span className="text-sm text-green-400">Online</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm">Threat Intel</span>
+                  <span className="text-sm">Inteligência de Ameaças</span>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm text-yellow-400">Updating</span>
+                    <span className="text-sm text-yellow-400">Atualizando</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm">JIRA Integration</span>
+                  <span className="text-sm">Integração JIRA</span>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm text-green-400">Connected</span>
+                    <span className="text-sm text-green-400">Conectado</span>
                   </div>
                 </div>
               </div>
@@ -101,34 +101,34 @@ const Index = () => {
           
           <div className="lg:col-span-2">
             <div className="bg-card rounded-lg p-6 border border-border">
-              <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+              <h3 className="text-lg font-semibold mb-4">Atividade Recente</h3>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-red-400 rounded-full mt-2"></div>
                   <div>
-                    <p className="text-sm">Critical alert: Suspicious email attachment detected</p>
-                    <p className="text-xs text-muted-foreground">2 minutes ago</p>
+                    <p className="text-sm">Alerta crítico: Anexo de email suspeito detectado</p>
+                    <p className="text-xs text-muted-foreground">2 minutos atrás</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
                   <div>
-                    <p className="text-sm">Alert resolved: Phishing attempt blocked</p>
-                    <p className="text-xs text-muted-foreground">15 minutes ago</p>
+                    <p className="text-sm">Alerta resolvido: Tentativa de phishing bloqueada</p>
+                    <p className="text-xs text-muted-foreground">15 minutos atrás</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-orange-400 rounded-full mt-2"></div>
                   <div>
-                    <p className="text-sm">New threat intelligence data imported</p>
-                    <p className="text-xs text-muted-foreground">1 hour ago</p>
+                    <p className="text-sm">Novos dados de inteligência de ameaças importados</p>
+                    <p className="text-xs text-muted-foreground">1 hora atrás</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-blue-400 rounded-full mt-2"></div>
                   <div>
-                    <p className="text-sm">User logged in: admin@company.com</p>
-                    <p className="text-xs text-muted-foreground">2 hours ago</p>
+                    <p className="text-sm">Usuário logou: admin@empresa.com</p>
+                    <p className="text-xs text-muted-foreground">2 horas atrás</p>
                   </div>
                 </div>
               </div>

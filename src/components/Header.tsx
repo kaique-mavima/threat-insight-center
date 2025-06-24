@@ -1,22 +1,14 @@
-
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Bell, User, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 export function Header() {
-  const { currentUser, logout } = useAuth();
-
-  return (
-    <header className="border-b border-border bg-card/50 backdrop-blur-sm">
+  const {
+    currentUser,
+    logout
+  } = useAuth();
+  return <header className="border-b border-border bg-card/50 backdrop-blur-sm">
       <div className="flex items-center justify-between h-16 px-6">
         <div className="flex items-center gap-4">
           <SidebarTrigger />
@@ -27,12 +19,7 @@ export function Header() {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
-              3
-            </span>
-          </Button>
+          
           <Button variant="ghost" size="icon">
             <Settings className="w-5 h-5" />
           </Button>
@@ -62,6 +49,5 @@ export function Header() {
           </DropdownMenu>
         </div>
       </div>
-    </header>
-  );
+    </header>;
 }

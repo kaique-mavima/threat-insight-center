@@ -10,7 +10,7 @@ export function Header() {
         <div className="flex items-center gap-4">
           <SidebarTrigger />
           <div>
-            <h2 className="text-lg font-semibold">Security Operations Dashboard</h2>
+            <h2 className="text-lg font-semibold">Cyber Intelligence Dashboard</h2>
             <p className="text-sm text-muted-foreground">Real-time threat monitoring and response</p>
           </div>
         </div>

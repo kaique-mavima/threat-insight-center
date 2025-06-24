@@ -62,14 +62,18 @@ export function AppSidebar() {
     <Sidebar className="border-r border-border">
       <SidebarHeader className="p-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
-            <Shield className="w-6 h-6 text-white" />
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
+            <img 
+              src="/lovable-uploads/a9812223-178a-479f-a62f-df2744d52b5c.png" 
+              alt="SIC Logo" 
+              className="w-full h-full object-cover"
+            />
           </div>
           <div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              SOC Dashboard
+              SIC Dashboard
             </h1>
-            <p className="text-xs text-muted-foreground">Security Operations Center</p>
+            <p className="text-xs text-muted-foreground">Cyber Intelligence Service</p>
           </div>
         </div>
       </SidebarHeader>

@@ -1,8 +1,9 @@
 
 import { Layout } from "@/components/Layout";
 import { ApiConfigForm } from "@/components/ApiConfigForm";
+import { NotificationIntegrations } from "@/components/NotificationIntegrations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Settings as SettingsIcon, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
 
 const Settings = () => {
   return (
@@ -19,6 +20,9 @@ const Settings = () => {
 
         {/* Configurações das APIs */}
         <ApiConfigForm />
+
+        {/* Integrações de Notificações */}
+        <NotificationIntegrations />
 
         {/* Informações do Sistema */}
         <Card>
@@ -52,6 +56,10 @@ const Settings = () => {
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
                     <span className="text-sm">Google Maps (Configurar)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span className="text-sm">Notificações (Slack, Teams, Telegram)</span>
                   </div>
                 </div>
               </div>

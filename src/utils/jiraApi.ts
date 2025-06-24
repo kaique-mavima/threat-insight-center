@@ -1,109 +1,149 @@
-
-import { API_CONFIG, JIRA_LABELS } from '@/config/api';
+import { API_CONFIG } from "@/config/api";
 
 export interface JiraIssue {
   id: string;
   key: string;
-  summary: string;
-  status: string;
-  priority: string;
-  assignee?: string;
-  created: string;
-  updated: string;
-  labels: string[];
-  description?: string;
-  country?: string;
+  fields: {
+    summary: string;
+    description: string;
+    status: {
+      name: string;
+    };
+    priority: {
+      name: string;
+    };
+    created: string;
+    labels: string[];
+    assignee: {
+      displayName: string;
+    } | null;
+  };
 }
 
-class JiraApiService {
-  private baseUrl: string;
-  private credentials: string;
+import { NotificationService } from '@/services/notificationService';
+import { AlertNotification } from '@/types/notifications';
 
-  constructor() {
-    this.baseUrl = API_CONFIG.jira.url;
-    this.credentials = btoa(`${API_CONFIG.jira.email}:${API_CONFIG.jira.apiToken}`);
+const getJiraConfig = () => {
+  return {
+    url: API_CONFIG.jira.url,
+    email: API_CONFIG.jira.email,
+    apiToken: API_CONFIG.jira.apiToken,
+  };
+};
+
+export const searchJiraIssues = async (jql: string = '', labels: string[] = []): Promise<JiraIssue[]> => {
+  const config = getJiraConfig();
+  
+  if (!config.url || !config.email || !config.apiToken) {
+    throw new Error('Configuração do Jira não encontrada');
   }
 
-  private async makeRequest(endpoint: string, options: RequestInit = {}) {
-    if (!this.baseUrl || !API_CONFIG.jira.email || !API_CONFIG.jira.apiToken) {
-      throw new Error('Configurações do Jira não encontradas');
-    }
+  let query = jql;
+  if (labels.length > 0) {
+    const labelsQuery = labels.map(label => `labels = "${label}"`).join(' OR ');
+    query = query ? `(${query}) AND (${labelsQuery})` : `(${labelsQuery})`;
+  }
 
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
-      ...options,
+  // Adicionar filtro para issues criadas recentemente (últimas 24h) se não especificado
+  if (!query.includes('created')) {
+    query = query ? `${query} AND created >= -1d` : 'created >= -1d';
+  }
+
+  const url = `${config.url}/rest/api/2/search`;
+  const auth = btoa(`${config.email}:${config.apiToken}`);
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
       headers: {
-        'Authorization': `Basic ${this.credentials}`,
-        'Accept': 'application/json',
+        'Authorization': `Basic ${auth}`,
         'Content-Type': 'application/json',
-        ...options.headers,
       },
+      body: JSON.stringify({
+        jql: query,
+        maxResults: 100,
+        fields: ['summary', 'description', 'status', 'priority', 'created', 'labels', 'assignee']
+      }),
     });
 
     if (!response.ok) {
       throw new Error(`Erro na API do Jira: ${response.status}`);
     }
 
-    return response.json();
-  }
-
-  async getIssuesByLabel(label: string): Promise<JiraIssue[]> {
-    try {
-      const jql = `labels = "${label}" AND status != "Done" ORDER BY created DESC`;
-      const response = await this.makeRequest(
-        `/rest/api/3/search?jql=${encodeURIComponent(jql)}&maxResults=100`
-      );
-
-      return response.issues.map((issue: any) => ({
-        id: issue.id,
-        key: issue.key,
-        summary: issue.fields.summary,
-        status: issue.fields.status.name,
-        priority: issue.fields.priority?.name || 'Médio',
-        assignee: issue.fields.assignee?.displayName,
-        created: issue.fields.created,
-        updated: issue.fields.updated,
-        labels: issue.fields.labels,
-        description: issue.fields.description?.content?.[0]?.content?.[0]?.text,
-        country: issue.fields.customfield_country || undefined,
-      }));
-    } catch (error) {
-      console.error('Erro ao buscar issues do Jira:', error);
-      return [];
-    }
-  }
-
-  async updateIssue(issueKey: string, updateData: Partial<JiraIssue>) {
-    try {
-      const payload = {
-        fields: {
-          ...(updateData.summary && { summary: updateData.summary }),
-          ...(updateData.description && { description: updateData.description }),
-        }
-      };
-
-      await this.makeRequest(`/rest/api/3/issue/${issueKey}`, {
-        method: 'PUT',
-        body: JSON.stringify(payload),
+    const data = await response.json();
+    
+    // Verificar se há novos alertas e enviar notificações
+    if (data.issues && data.issues.length > 0)  {
+      const newIssues = data.issues.filter((issue: any) => {
+        const created = new Date(issue.fields.created);
+        const now = new Date();
+        const hoursDiff = (now.getTime() - created.getTime()) / (1000 * 60 * 60);
+        return hoursDiff <= 1; // Issues criadas na última hora
       });
 
-      return true;
-    } catch (error) {
-      console.error('Erro ao atualizar issue do Jira:', error);
-      return false;
+      // Enviar notificações para issues realmente novas
+      for (const issue of newIssues) {
+        const alert: AlertNotification = {
+          title: issue.fields.summary || 'Novo Alerta Jira',
+          description: issue.fields.description || 'Sem descrição disponível',
+          severity: mapJiraPriorityToSeverity(issue.fields.priority?.name),
+          timestamp: issue.fields.created,
+          source: 'Jira'
+        };
+
+        // Enviar notificação de forma assíncrona
+        NotificationService.sendAlert(alert).catch(error => 
+          console.error('Erro ao enviar notificação:', error)
+        );
+      }
     }
-  }
 
-  async getEmailIssues() {
-    return this.getIssuesByLabel(JIRA_LABELS.EMAIL);
+    return data.issues || [];
+  } catch (error) {
+    console.error('Erro ao buscar issues do Jira:', error);
+    throw error;
   }
+};
 
-  async getWebIssues() {
-    return this.getIssuesByLabel(JIRA_LABELS.WEB);
-  }
-
-  async getThreatIntelIssues() {
-    return this.getIssuesByLabel(JIRA_LABELS.THREAT_INTEL);
-  }
+function mapJiraPriorityToSeverity(priority: string): AlertNotification['severity'] {
+  const severityMap: {[key: string]: AlertNotification['severity']} = {
+    'Highest': 'Crítico',
+    'High': 'Alto',
+    'Medium': 'Médio',
+    'Low': 'Baixo',
+    'Lowest': 'Baixo'
+  };
+  
+  return severityMap[priority] || 'Médio';
 }
 
-export const jiraApi = new JiraApiService();
+export const updateJiraIssue = async (issueId: string, data: { fields: any }) => {
+  const config = getJiraConfig();
+
+  if (!config.url || !config.email || !config.apiToken) {
+    throw new Error('Jira configuration not found');
+  }
+
+  const url = `${config.url}/rest/api/2/issue/${issueId}`;
+  const auth = btoa(`${config.email}:${config.apiToken}`);
+
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Jira API error: ${response.status}`);
+    }
+
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error updating Jira issue:', error);
+    return { success: false, error: error.message };
+  }
+};

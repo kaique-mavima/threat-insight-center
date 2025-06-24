@@ -70,7 +70,7 @@ export function AppSidebar() {
             />
           </div>
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold text-white">
               SIC Dashboard
             </h1>
             <p className="text-xs text-muted-foreground">Cyber Intelligence Service</p>

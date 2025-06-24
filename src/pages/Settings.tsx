@@ -1,16 +1,13 @@
-
 import { Layout } from "@/components/Layout";
 import { ApiConfigForm } from "@/components/ApiConfigForm";
 import { NotificationIntegrations } from "@/components/NotificationIntegrations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Zap } from "lucide-react";
-
 const Settings = () => {
-  return (
-    <Layout>
+  return <Layout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-slate-50">
             Configurações
           </h1>
           <p className="text-muted-foreground mt-2">
@@ -74,8 +71,6 @@ const Settings = () => {
           </CardContent>
         </Card>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Settings;

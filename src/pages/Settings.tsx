@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
-import { Settings as SettingsIcon, Database, Bell, Shield, Mail, MessageCircle, Users, Slack } from "lucide-react";
+import { Settings as SettingsIcon, Database, Bell, Mail, MessageCircle, Users, Slack } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,12 +84,28 @@ const Settings = () => {
 
           <div className="bg-card rounded-lg p-6 border border-border">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Shield className="w-5 h-5" />
-              Security Settings
+              <Bell className="w-5 h-5" />
+              Alert Configuration
             </h3>
-            <p className="text-sm text-muted-foreground">
-              Configure authentication methods, session timeouts, and security policies.
-            </p>
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground mb-4">
+                Os alertas serão enviados com os seguintes campos por padrão:
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-sm">Título</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-sm">Descrição</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-sm">Severidade</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="bg-card rounded-lg p-6 border border-border">
